@@ -23,47 +23,18 @@ var sharpBKtoner = ["Modello dispositivo: MX-M354N", "Modello dispositivo: MX-M5
 
 //controllo data
 
-const mese = new Date();
-var mesecorrente = mese.getUTCMonth();
+//controllo data
+var nomemese = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dec"];
+var now = new Date();
+var mesecorrente = nomemese[now.getUTCMonth()];
+console.log(mesecorrente)
 
-    if (mesecorrente == 0) {
-        mesecorrente = 'Jan'
-    } else
-        if (mesecorrente == 1) {
-            mesecorrente = 'Feb'
-        } else
-            if (mesecorrente == 2) {
-                mesecorrente = 'Mar'
-            } else
-                if (mesecorrente == 3) {
-                    mesecorrente = 'Apr'
-                } else
-                    if (mesecorrente == 4) {
-                        mesecorrente = 'May'
-                    } else
-                        if (mesecorrente == 5) {
-                            mesecorrente = 'Jun'
-                        } else
-                            if (mesecorrente == 6) {
-                                mesecorrente = 'Jul'
-                            } else
-                                if (mesecorrente == 7) {
-                                    mesecorrente = 'Aug'
-                                } else
-                                    if (mesecorrente == 8) {
-                                        mesecorrente = 'Sep'
-                                    } else
-                                        if (mesecorrente == 9) {
-                                            mesecorrente = 'Oct'
-                                        } else
-                                            if (mesecorrente == 10) {
-                                                mesecorrente = 'Nov'
-                                            } else
-                                                if (mesecorrente == 11) {
-                                                    mesecorrente = 'Dic'
-                                            };
+//mesecorrente = "Jan";
 
-
+// controllo mese precedente
+var nummeseprecedente = (now.getUTCMonth() - 1);
+var meseprecedente = nomemese[nummeseprecedente];
+console.log(meseprecedente)
 
 const anno = new Date();
 
@@ -102,11 +73,17 @@ for (let i = 0, max = modello.length; i < max; i++) {
 
 
 // risultato
-document.write(mesecorrente + "   " + annocorrente + "<br>" + "<br>");
+
+
+
+ var comunicazioni = 0
 for (let i = comunicamin, max = comunicamax; i < max; i++) {
-    document.write(`${i}` + " ---- " + mittente[i] + " -------- " + modello[i] + " -------- " + tonerresiduoBK[i] + "<br>");
-    document.write(`${i}` + " ---- " + mittente[i] + " -------- " + modello[i] + " -------- " + tonerresiduoC[i] + "<br>");
-    document.write(`${i}` + " ---- " + mittente[i] + " -------- " + modello[i] + " -------- " + tonerresiduoM[i] + "<br>");
-    document.write(`${i}` + " ---- " + mittente[i] + " -------- " + modello[i] + " -------- " + tonerresiduoY[i] + "<br>");
-    document.write("<br>"+"<br>");
+    comunicazioni++;
+    let node = document.createElement("div");
+    node.setAttribute('id', 'risultato2');
+    node.setAttribute('class', 'visualizzazione2', 'rettangolo');
+    node.innerHTML = `${i}` + " " + mittente[i] + " " + modello[i] + "<br>" + tonerresiduoBK[i] + "<br>" + tonerresiduoC[i] + "<br>" + tonerresiduoM[i] + "<br>" + tonerresiduoY[i] + "<br>";
+    document.getElementById("risultato2").appendChild(node);
 };
+
+document.getElementById("risultato").innerHTML = (mesecorrente + " " + annocorrente + " Hai ricevuto " + comunicazioni + " comunicazioni dai Multifunzione Sharp" + "<br>" + "<br>");

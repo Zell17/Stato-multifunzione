@@ -23,48 +23,15 @@ var sharpNOtoner = ["Modello dispositivo: MX-M453N", "Modello dispositivo: MX-M2
 var sharpBKtoner = ["Modello dispositivo: MX-M354N", "Modello dispositivo: MX-M565N", "Modello dispositivo: MX-M564N", "Modello dispositivo: MX-M266N", "Modello dispositivo: MX-M314N", "Modello dispositivo: MX-M315N", "Modello dispositivo: MX-M316N"];
 
 //controllo data
+var nomemese = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dec"];
+var now = new Date();
+var mesecorrente = nomemese[now.getUTCMonth()];
+console.log(mesecorrente)
 
-const mese = new Date();
-var mesecorrente = mese.getUTCMonth();
-
-if (mesecorrente == 0) {
-    mesecorrente = 'Jan'
-} else
-    if (mesecorrente == 1) {
-        mesecorrente = 'Feb'
-    } else
-        if (mesecorrente == 2) {
-            mesecorrente = 'Mar'
-        } else
-            if (mesecorrente == 3) {
-                mesecorrente = 'Apr'
-            } else
-                if (mesecorrente == 4) {
-                    mesecorrente = 'May'
-                } else
-                    if (mesecorrente == 5) {
-                        mesecorrente = 'Jun'
-                    } else
-                        if (mesecorrente == 6) {
-                            mesecorrente = 'Jul'
-                        } else
-                            if (mesecorrente == 7) {
-                                mesecorrente = 'Aug'
-                            } else
-                                if (mesecorrente == 8) {
-                                    mesecorrente = 'Sep'
-                                } else
-                                    if (mesecorrente == 9) {
-                                        mesecorrente = 'Oct'
-                                    } else
-                                        if (mesecorrente == 10) {
-                                            mesecorrente = 'Nov'
-                                        } else
-                                            if (mesecorrente == 11) {
-                                                mesecorrente = 'Dic'
-                                            };
-
-
+// controllo mese precedente
+var nummeseprecedente = (now.getUTCMonth() - 1);
+var meseprecedente = nomemese[nummeseprecedente];
+console.log(meseprecedente)
 
 const anno = new Date();
 
@@ -73,6 +40,8 @@ var annocorrente = anno.getUTCFullYear();
 var appoggio = [];
 var comunicamin = 0;
 var comunicamax = 0;
+
+//mesecorrente = "Jan"
 
 for (let i = 0, max = data.length; i < max; i++) {
     appoggio[i] = data[i].split(' ')
@@ -100,16 +69,87 @@ for (let i = 0, max = modello.length; i < max; i++) {
     };
 };
 
-// urgenze
+// urgenze 
+var interoBK = [];
+var interoC = [];
+var interoM = [];
+var interoY = [];
 
-document.write(mesecorrente + "   " + annocorrente + "<br>" + "<br>");
-var urgente = "Toner residuo (Bk) = 25%"
 for (let i = comunicamin, max = comunicamax; i < max; i++) {
-    if ((tonerresiduoBK[i]) <= urgente && (tonerresiduoBK[i]) != 'Non comunicato' ) {
-        document.write(`${i}` + " ---- " + mittente[i] + " -------- " + modello[i] + " -------- " + tonerresiduoBK[i] + "<br>");
-        document.write(`${i}` + " ---- " + mittente[i] + " -------- " + modello[i] + " -------- " + tonerresiduoC[i] + "<br>");
-        document.write(`${i}` + " ---- " + mittente[i] + " -------- " + modello[i] + " -------- " + tonerresiduoM[i] + "<br>");
-        document.write(`${i}` + " ---- " + mittente[i] + " -------- " + modello[i] + " -------- " + tonerresiduoY[i] + "<br>");
-        document.write("<br>" + "<br>");
+    let appoggioBK = [];
+    let appoggioC = [];
+    let appoggioM = [];
+    let appoggioY = [];
+    appoggioBK[i] = tonerresiduoBK[i].split(' ');
+    appoggioC[i] = tonerresiduoC[i].split(' ');
+    appoggioM[i] = tonerresiduoM[i].split(' ');
+    appoggioY[i] = tonerresiduoY[i].split(' ');
+    interoBK[i] = parseInt(appoggioBK[i][4], 10);
+    interoC[i] = parseInt(appoggioC[i][4], 10);
+    interoM[i] = parseInt(appoggioM[i][4], 10);
+    interoY[i] = parseInt(appoggioY[i][4], 10);
+};
+console.log(interoBK, interoC, interoM, interoY);
+
+var urgenti = 0
+var urgenteBK = 25;
+var urgenteC = 25;
+var urgenteM = 25;
+var urgenteY = 25;
+
+for (let i = comunicamin, max = comunicamax; i < max; i++) {
+    if (((interoBK[i]) < urgenteBK && (interoBK[i]) != NaN)
+        || ((interoC[i]) < urgenteC && (interoC[i]) != NaN)
+        || ((interoM[i]) < urgenteM && (interoM[i]) != NaN)
+        || ((interoY[i]) < urgenteY && (interoY[i]) != NaN)) {
+        let node = document.createElement("div");
+        node.setAttribute('id', 'risultato2');
+        node.setAttribute('class', 'visualizzazione2', 'rettangolo');
+        node.innerHTML = `${i}` + " " + mittente[i] + " " + modello[i] + "<br>" + tonerresiduoBK[i] + "<br>" + tonerresiduoC[i] + "<br>" + tonerresiduoM[i] + "<br>" + tonerresiduoY[i] + "<br>";
+        document.getElementById("risultato2").appendChild(node);
+        urgenti++;
     };
 };
+console.log(urgenti);
+
+var contBKU = 0;
+var contCU = 0;
+var contMU = 0;
+var contYU = 0;
+
+for (let i = comunicamin, max = comunicamax; i < max; i++) {
+    if ((interoBK[i]) < urgenteBK && (interoBK[i]) != NaN) {
+        contBKU++;
+    } if ((interoC[i]) < urgenteC && (interoC[i]) != NaN) {
+        contCU++;
+    } if ((interoM[i]) < urgenteM && (interoM[i]) != NaN) {
+        contMU++;
+    } if ((interoY[i]) < urgenteY && (interoY[i]) != NaN) {
+        contYU++;
+    }
+
+};
+
+console.log(contBKU, contCU, contMU, contYU);
+
+var nodeBKU = document.createElement("NBKU");
+nodeBKU.setAttribute('class','ntonerurgenti');
+nodeBKU.innerHTML = contBKU;
+document.getElementById("cerchioBK").appendChild(nodeBKU);
+
+var nodeCU = document.createElement("NCU");
+nodeCU.setAttribute('class', 'ntonerurgenti');
+nodeCU.innerHTML = contCU;
+document.getElementById("cerchioC").appendChild(nodeCU);
+
+var nodeMU = document.createElement("NMU");
+nodeMU.setAttribute('class', 'ntonerurgenti');
+nodeMU.innerHTML = contMU;
+document.getElementById("cerchioM").appendChild(nodeMU);
+
+var nodeYU = document.createElement("NYU");
+nodeYU.setAttribute('class', 'ntonerurgenti');
+nodeYU.innerHTML = contYU;
+document.getElementById("cerchioY").appendChild(nodeYU);
+
+document.getElementById("risultato").innerHTML = (mesecorrente +" "+ annocorrente + " Ci sono n. " + urgenti +  " Multifunzione con Almeno un colore al di sotto del 25%" + "<br>" + "<br>");
